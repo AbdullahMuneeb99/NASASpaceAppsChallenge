@@ -1,6 +1,5 @@
-// frontend/src/components/LogbookTab.js
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { LogbookAPI } from "./logbookAPI";
 
 export default function LogbookTab() {
   const [entries, setEntries] = useState([]);
@@ -12,8 +11,8 @@ export default function LogbookTab() {
   // fetch all logbook entries
   const fetchEntries = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/logbook/entries");
-      setEntries(res.data.items || res.data || []);
+      const data = await LogbookAPI.getEntries();
+      setEntries(data.items || data || []);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching logbook entries:", err);
@@ -28,10 +27,7 @@ export default function LogbookTab() {
       return;
     }
     try {
-      const res = await axios.post("http://localhost:5000/logbook/entry", {
-        author,
-        content,
-      });
+      await LogbookAPI.addEntry(author, content);
       setMsg("✅ Entry added");
       setContent("");
       fetchEntries();
@@ -44,7 +40,7 @@ export default function LogbookTab() {
   // delete an entry
   const deleteEntry = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/logbook/entry/${id}`);
+      await LogbookAPI.deleteEntry(id);
       setMsg("🗑️ Entry deleted");
       fetchEntries();
     } catch (err) {
