@@ -3,7 +3,7 @@ from django.http import JsonResponse, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-sleep_data = []  # stores all sleep entries
+sleep_data = []
 
 def _mins(t):
     """Turn HH:MM into total minutes since midnight."""
@@ -62,5 +62,6 @@ def alarm_plan(request):
     if request.method != "POST": return HttpResponseNotAllowed(["POST"])
     body = json.loads(request.body or b"{}")
     return JsonResponse(plan_alarm(body.get("minutes", 0)))
+
 
 
