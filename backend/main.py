@@ -1,13 +1,12 @@
-# backend/spacevitals/main.py
 from flask import Flask, jsonify
 from flask_cors import CORS
 
 # Import blueprints from the new package paths
-from spacevitals.routes.communications_routes import comms_bp
-from spacevitals.routes.sleep_routes import sleep_bp
-from spacevitals.routes.medical_routes import medical_bp
-from spacevitals.routes.power_routes import power_bp
-from spacevitals.routes.logbook_routes import logbook_bp  # you'll create this file below
+from routes.communications_routes import comms_bp
+from routes.sleep_routes import sleep_bp
+from routes.medical_routes import medical_bp
+from routes.power_routes import power_bp
+from routes.logbook_routes import logbook_bp  
 
 def create_app():
     app = Flask(__name__)
