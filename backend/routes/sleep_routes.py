@@ -74,69 +74,65 @@ def plan_alarm():
 
 '''
 from datetime import datetime, timedelta
-from django.http import JsonResponse, HttpResponseNotAllowed
-from django.views.decorators.csrf import csrf_exempt
-import json
-
-sleep_data = []
+from flask import Blueprint, request, jsonify
+sleep_data=[]
+bp=Blueprint("sleep",__name__)
 
 def _mins(t):
     """Turn HH:MM into total minutes since midnight."""
-    h, m = map(int, t.split(":")); return h * 60 + m
-
-def _dur(bed, wake):
-    """Find sleep length in hours between bed and wake times."""
-    try: b, w = _mins(bed), _mins(wake)
+    h,m=map(int,t.split(":")); return h*60+m
+    
+def _dur(bed,wake):
+    """Hours between bed and wake (wrap past midnight)."""
+    try: b,w=_mins(bed),_mins(wake)
     except: return None
-    if w < b: w += 24 * 60
-    return round((w - b) / 60, 2)
-
-def add_log(bed, wake):
-    """Add a new sleep entry and return the hours slept."""
-    d = _dur(bed, wake)
-    if d is None: return {"ok": False, "error": "Use HH:MM format"}
-    rec = {"bed": bed, "wake": wake, "hours": d}
-    sleep_data.append(rec)
-    return {"ok": True, "hours": d}
-
+    if w<b: w+=24*60
+    return round((w-b)/60,2)
+    
+def add_log(bed,wake):
+    """Add a sleep entry and return result dict."""
+    d=_dur(bed,wake)
+    if d is None: return {"ok":False,"error":"Use HH:MM format"}
+    rec={"bed":bed,"wake":wake,"hours":d}; sleep_data.append(rec); return {"ok":True,"hours":d}
+    
 def get_recent(n=5):
-    """Get the last n sleep logs (most recent first)."""
+    """Return last n logs, newest first."""
     return sleep_data[-n:][::-1]
-
+    
 def get_average(k=7):
-    """Get average sleep hours for last k logs."""
-    rows = sleep_data[-k:]
-    if not rows: return None
-    return round(sum(r["hours"] for r in rows) / len(rows), 2)
-
+    """Average sleep hours for last k logs."""
+    rows=sleep_data[-k:]
+    return None if not rows else round(sum(r["hours"] for r in rows)/len(rows),2)
+    
 def plan_alarm(minutes):
-    """Return time info for an alarm after X minutes."""
-    t = datetime.now() + timedelta(minutes=int(minutes))
-    return {"target_hms": t.strftime("%H:%M:%S"), "target_iso": t.isoformat()}
+    """Alarm time now + X minutes."""
+    try: minutes=int(minutes)
+    except: minutes=0
+    t=datetime.now()+timedelta(minutes=minutes); return {"target_hms":t.strftime("%H:%M:%S"),"target_iso":t.isoformat()}
+@bp.post("/sleep/add")
 
-@csrf_exempt
-def sleep_add(request):
-    """POST /sleep/add → save a sleep record."""
-    if request.method != "POST": return HttpResponseNotAllowed(["POST"])
-    body = json.loads(request.body or b"{}")
-    return JsonResponse(add_log(body.get("bed"), body.get("wake")))
+def sleep_add():
+    """POST /sleep/add → save sleep record."""
+    body=request.get_json(silent=True) or {}; return jsonify(add_log(body.get("bed"),body.get("wake")))
+@bp.get("/sleep/recent")
 
-def sleep_recent(request):
-    """GET /sleep/recent → show recent logs."""
-    n = int(request.GET.get("n", 5))
-    return JsonResponse({"items": get_recent(n)})
+def sleep_recent():
+    """GET /sleep/recent?n=5 → recent logs."""
+    n=int(request.args.get("n",5)); return jsonify({"items":get_recent(n)})    
+@bp.get("/sleep/average")
 
-def sleep_average(request):
-    """GET /sleep/average → show average sleep hours."""
-    k = int(request.GET.get("k", 7))
-    return JsonResponse({"average": get_average(k)})
+def sleep_average():
+    """GET /sleep/average?k=7 → average hours."""
+    k=int(request.args.get("k",7)); return jsonify({"average":get_average(k)})
+@bp.post("/alarm/plan")
 
-@csrf_exempt
-def alarm_plan(request):
-    """POST /alarm/plan → plan an alarm time."""
-    if request.method != "POST": return HttpResponseNotAllowed(["POST"])
-    body = json.loads(request.body or b"{}")
-    return JsonResponse(plan_alarm(body.get("minutes", 0)))
+def alarm_plan():
+    """POST /alarm/plan → plan an alarm time."""; body=request.get_json(silent=True) or {}; return jsonify(plan_alarm(body.get("minutes",0)))
+
+
+
+
+
 
 
 '''
