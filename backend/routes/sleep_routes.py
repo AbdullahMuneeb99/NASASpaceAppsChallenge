@@ -19,6 +19,7 @@ def add_log(bed,wake):
     d=_dur(bed,wake)
     if d is None: return {"ok":False,"error":"Use HH:MM format"}
     rec={"bed":bed,"wake":wake,"hours":d}; sleep_data.append(rec); return {"ok":True,"hours":d}
+    
 def get_recent(n=5):
     """Return last n logs, newest first."""
     return sleep_data[-n:][::-1]
@@ -42,9 +43,9 @@ def sleep_add():
 
 def sleep_recent():
     """GET /sleep/recent?n=5 → recent logs."""
-    n=int(request.args.get("n",5)); return jsonify({"items":get_recent(n)})
-    
+    n=int(request.args.get("n",5)); return jsonify({"items":get_recent(n)})    
 @bp.get("/sleep/average")
+
 def sleep_average():
     """GET /sleep/average?k=7 → average hours."""
     k=int(request.args.get("k",7)); return jsonify({"average":get_average(k)})
@@ -52,6 +53,7 @@ def sleep_average():
 
 def alarm_plan():
     """POST /alarm/plan → plan an alarm time."""; body=request.get_json(silent=True) or {}; return jsonify(plan_alarm(body.get("minutes",0)))
+
 
 
 
