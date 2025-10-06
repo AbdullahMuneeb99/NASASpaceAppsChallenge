@@ -1,4 +1,4 @@
-# backend/space_vitals/routes/logbook_routes.py
+# backend/routes/logbook_routes.py
 
 from flask import Blueprint, request, jsonify
 from services.logbook_service import LogbookService
@@ -96,3 +96,4 @@ def delete_log(log_id):
         return jsonify({"status": "error", "message": "Log not found"}), 404
 
     return jsonify({"status": "success", "message": "Log deleted"}), 200
+
