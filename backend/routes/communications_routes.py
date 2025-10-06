@@ -1,4 +1,4 @@
-# backend/space_vitals/routes/comms_routes.py
+# backend/routes/comms_routes.py
 
 from flask import Blueprint, request, jsonify
 from ..services.communications_service import CommunicationService
