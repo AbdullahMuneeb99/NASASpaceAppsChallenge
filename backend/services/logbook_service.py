@@ -1,67 +1,60 @@
-# backend/space_vitals/services/logbook_service.py
+# backend/services/logbook_service.py
 
-from sqlalchemy.orm import Session
-from app.models.logbook import LogEntry
+from datetime import datetime
 
+class LogEntry:
+    _entries = []
+    _id_counter = 1
 
-def create_log(db: Session, title: str, content: str, author: str) -> LogEntry:
-    """
-    Create a new log entry and persist it to the database.
-    """
-    log = LogEntry(title=title, content=content, author=author)
-    db.add(log)
-    db.commit()
-    db.refresh(log)
-    return log
+    def __init__(self, author, content):
+        self.id = LogEntry._id_counter
+        LogEntry._id_counter += 1
+        self.author = author
+        self.content = content
+        self.timestamp = datetime.utcnow().isoformat()
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "author": self.author,
+            "content": self.content,
+            "timestamp": self.timestamp
+        }
 
-def get_logs(db: Session, skip: int = 0, limit: int = 50):
-    """
-    Retrieve a paginated list of logs, newest first.
-    """
-    return (
-        db.query(LogEntry)
-        .order_by(LogEntry.created_at.desc())
-        .offset(skip)
-        .limit(limit)
-        .all()
-    )
+class LogbookService:
+    @staticmethod
+    def get_logs():
+        # Return newest first
+        return [entry.to_dict() for entry in reversed(LogEntry._entries)]
 
+    @staticmethod
+    def create_log(author, content):
+        entry = LogEntry(author, content)
+        LogEntry._entries.append(entry)
+        return entry.to_dict()
 
-def get_log(db: Session, log_id: int):
-    """
-    Retrieve a single log entry by ID.
-    """
-    return db.query(LogEntry).filter(LogEntry.id == log_id).first()
-
-
-def update_log(db: Session, log_id: int, **fields):
-    """
-    Update fields of a log entry if it exists.
-    Returns the updated log or None if not found.
-    """
-    log = get_log(db, log_id)
-    if not log:
+    @staticmethod
+    def get_log(log_id):
+        for entry in LogEntry._entries:
+            if entry.id == log_id:
+                return entry.to_dict()
         return None
 
-    for key, value in fields.items():
-        if value is not None and hasattr(log, key):
-            setattr(log, key, value)
+    @staticmethod
+    def update_log(log_id, author=None, content=None):
+        for entry in LogEntry._entries:
+            if entry.id == log_id:
+                if author is not None:
+                    entry.author = author
+                if content is not None:
+                    entry.content = content
+                return entry.to_dict()
+        return None
 
-    db.commit()
-    db.refresh(log)
-    return log
-
-
-def delete_log(db: Session, log_id: int) -> bool:
-    """
-    Delete a log entry by ID.
-    Returns True if deleted, False if not found.
-    """
-    log = get_log(db, log_id)
-    if not log:
+    @staticmethod
+    def delete_log(log_id):
+        for i, entry in enumerate(LogEntry._entries):
+            if entry.id == log_id:
+                LogEntry._entries.pop(i)
+                return True
         return False
-
-    db.delete(log)
-    db.commit()
-    return True
