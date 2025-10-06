@@ -1,39 +1,34 @@
+# backend/spacevitals/main.py
 from flask import Flask, jsonify
 from flask_cors import CORS
-import os
 
-# Import route blueprints from the modules
-from spacevitals.routes.comms_routes import comms_bp
-from spacevitals.routes.life_support_routes import life_support_bp
+# Import blueprints from the new package paths
+from spacevitals.routes.communications_routes import comms_bp
+from spacevitals.routes.sleep_routes import sleep_bp
 from spacevitals.routes.medical_routes import medical_bp
 from spacevitals.routes.power_routes import power_bp
+from spacevitals.routes.logbook_routes import logbook_bp  # you'll create this file below
 
 def create_app():
-    """Factory function to create and configure the Flask app."""
     app = Flask(__name__)
 
-    # Enable CORS (so frontend React app can communicate with backend)
-    CORS(app)
+    # Enable CORS for the API so the Vite/React frontend can call it
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
 
-    # Load configurations
-    app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "spacevitals-secret-key")
+    # Register blueprints under /api/...
+    app.register_blueprint(comms_bp,    url_prefix="/api/comms")
+    app.register_blueprint(sleep_bp,    url_prefix="/api/sleep")
+    app.register_blueprint(medical_bp,  url_prefix="/api/medical")
+    app.register_blueprint(power_bp,    url_prefix="/api/power")
+    app.register_blueprint(logbook_bp,  url_prefix="/api/logbook")
 
-    # Register blueprints for each module
-    app.register_blueprint(comms_bp, url_prefix="/api/comms")
-    app.register_blueprint(life_support_bp, url_prefix="/api/life-support")
-    app.register_blueprint(medical_bp, url_prefix="/api/medical")
-    app.register_blueprint(power_bp, url_prefix="/api/power")
-
-    # Health check route
-    @app.route('/api/health', methods=['GET'])
-    def health_check():
-        return jsonify({"status": "SpaceVitals backend is operational 🚀"}), 200
+    @app.get("/api/health")
+    def health():
+        return jsonify({"status": "ok"})
 
     return app
 
-
 if __name__ == "__main__":
     app = create_app()
-
-    # Run server (in development mode)
+    # Runs on http://127.0.0.1:5000
     app.run(host="0.0.0.0", port=5000, debug=True)
