@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LogbookAPI } from "./logbookAPI";
+import { LogbookAPI } from "../services/logbookAPI";
 
 export default function LogbookTab() {
   const [entries, setEntries] = useState([]);

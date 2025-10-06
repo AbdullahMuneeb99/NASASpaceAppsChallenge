@@ -1,7 +1,7 @@
 // sleepAPI.js — client for the Django routes (same-origin)
 
 // BASE: API root. Keep empty for same-origin requests.
-const BASE = ""; // or "http://localhost:8000" if Django runs separately
+const BASE = "http://localhost:8000"; // or "http://localhost:8000" if Django runs separately
 
 /**
  * Helper to send a JSON fetch request and return parsed data.

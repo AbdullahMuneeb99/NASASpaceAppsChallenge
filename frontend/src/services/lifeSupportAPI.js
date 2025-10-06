@@ -1,6 +1,6 @@
 // lifesupportAPI.js
 /** Base path for the Flask routes (adjust if your server differs). */
-const BASE_URL = '/api/life-support';
+const BASE_URL = "http://localhost:8000";
 
 /** Helper to call the API and parse JSON, with friendly errors. */
 async function request(path, options = {}) {

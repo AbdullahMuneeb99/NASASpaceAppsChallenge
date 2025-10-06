@@ -1,6 +1,7 @@
 // frontend/src/components/PowerTab.js
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { PowerAPI } from "../services/powerAPI";
 
 const PowerTab = () => {
   const [powerData, setPowerData] = useState(null);

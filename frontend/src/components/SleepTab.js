@@ -1,6 +1,6 @@
 // sleepTab.js — React tab for Sleep API
 import React, { useEffect, useState } from "react";
-import { SleepAPI } from "./sleepAPI";
+import { SleepAPI } from "../services/sleepAPI";
 
 export default function SleepTab() {
   // basic state
@@ -72,4 +72,4 @@ export default function SleepTab() {
       {alarm && <div style={{ marginTop:6 }}>Target: {alarm.target_hms} <code>{alarm.target_iso}</code></div>}
     </div>
   );
-
+}

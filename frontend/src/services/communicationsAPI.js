@@ -1,5 +1,5 @@
 // API root. Keep empty for same-origin; set to "http://localhost:8000" if needed.
-const BASE = "";
+const BASE = "http://localhost:8000";
 
 /** Send JSON and return parsed JSON (throws on non-2xx). */
 async function jsonFetch(url, opts = {}) {
@@ -18,7 +18,7 @@ async function jsonFetch(url, opts = {}) {
  *  GET  /comms/latest?channel=...
  *  POST /comms/clear       {}
  */
-export const CommsAPI = {
+export const CommunicationsAPI = {
   sendMessage: (payload) =>
     jsonFetch(`${BASE}/comms/send`, { method: "POST", body: JSON.stringify(payload) }),
 

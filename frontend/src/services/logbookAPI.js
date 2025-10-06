@@ -2,7 +2,7 @@
 
 // BASE: API root. Keep empty for same-origin requests.
 // If backend runs on a different port (e.g. Flask/Django dev), set accordingly.
-const BASE = ""; // or "http://localhost:5000"
+const BASE = "http://localhost:8000";
 
 /**
  * Helper: fetch JSON, throw on non-OK response.

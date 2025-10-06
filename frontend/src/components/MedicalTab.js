@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getVitals, simulateVitalChanges, getHealthStatus, getFirstAidProtocol } from "../api/medicalAPI";
+import { getVitals, simulateVitalChanges, getHealthStatus, getFirstAidProtocol } from "../services/medicalAPI";
+import {MedicalAPI} from "../services/medicalAPI";
 
 export default function MedicalTab() {
   const [vitals, setVitals] = useState(null);

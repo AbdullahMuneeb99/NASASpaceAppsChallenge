@@ -1,6 +1,6 @@
 // CommunicationsTab.js — React UI for comms
 import React, { useEffect, useState } from "react";
-import { CommsAPI } from "./communicationsAPI";
+import { CommunicationsAPI } from "../services/communicationsAPI";
 
 export default function CommunicationsTab() {
   // basic form + view state

@@ -1,6 +1,7 @@
 // frontend/src/components/LifeSupportTab.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { LifeSupportAPI } from "../services/lifeSupportAPI";
 
 const LifeSupportTab = () => {
   const [lifeData, setLifeData] = useState(null);

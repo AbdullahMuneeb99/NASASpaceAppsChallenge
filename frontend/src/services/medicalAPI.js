@@ -1,6 +1,6 @@
 // medicalAPI.js
 /** Adjust if your Flask route prefix differs. */
-const BASE_URL = '/api/medical';
+const BASE_URL = "http://localhost:8000";
 
 /** Tiny fetch helper with JSON parsing + friendly errors. */
 async function request(path, options = {}) {

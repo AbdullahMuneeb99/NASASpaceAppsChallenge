@@ -1,0 +1,53 @@
+/* ===== theme.css ===== */
+
+/* SpaceVitals theme variables */
+:root {
+  --color-bg: #0a0f1c;
+  --color-panel: #111a2b;
+  --color-accent: #7dd3fc;
+  --color-text: #e0e6f5;
+  --color-subtext: #9ca3af;
+  --color-ok: #22c55e;
+  --color-warning: #facc15;
+  --color-error: #ef4444;
+  --font-main: 'Orbitron', sans-serif;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-main);
+}
+
+button {
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border: 1px solid #334155;
+  border-radius: 6px;
+  color: var(--color-accent);
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: linear-gradient(145deg, #1e3a8a, #0f172a);
+}
+
+.glow {
+  box-shadow: 0 0 10px rgba(125, 211, 252, 0.5);
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

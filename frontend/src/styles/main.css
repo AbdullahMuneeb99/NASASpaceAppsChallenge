@@ -1,0 +1,57 @@
+/* ===== main.css ===== */
+body {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  background-color: #0a0f1c;
+  color: #e0e6f5;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  background-color: #111a2b;
+  padding: 1rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 1px solid #223356;
+}
+
+.app-title {
+  margin: 0;
+  color: #7dd3fc;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.nav-bar {
+  margin-top: 0.5rem;
+}
+
+.nav-link {
+  margin: 0 10px;
+  color: #a0aec0;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: #38bdf8;
+}
+
+.nav-link.active {
+  color: #7dd3fc;
+  border-bottom: 2px solid #7dd3fc;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto;
+}
